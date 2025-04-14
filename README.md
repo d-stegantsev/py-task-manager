@@ -1,1 +1,1 @@
-git init# py-task-manager
+# py-task-manager
