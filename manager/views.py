@@ -1,9 +1,11 @@
-from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.edit import FormMixin
 
 from manager.forms import CommentForm
-from manager.models import Task, Comment
+from manager.models import Task, Comment, Worker
 
 
 class TaskListView(ListView):
@@ -51,3 +53,15 @@ class TaskDetailView(FormMixin, DetailView):
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+class SignUpView(CreateView):
+    model = Worker
+    form_class = UserCreationForm
+    template_name = "registration/signup.html"
+    success_url = reverse_lazy("manager:task-list")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object)
+        return response
