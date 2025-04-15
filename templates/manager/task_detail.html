@@ -25,5 +25,31 @@
     {% endfor %}
   </p>
 
+  <hr>
+
+  <h5>Comments</h5>
+  {% for comment in comments %}
+    <div class="mb-2 p-2 border rounded">
+      <small><strong>{{ comment.created_by.username }}</strong> — {{ comment.created_time|date:"Y-m-d H:i" }}</small>
+      <p class="mb-0">{{ comment.content }}</p>
+    </div>
+  {% empty %}
+    <p>No comments yet.</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+    <hr>
+    <h5>Add a comment</h5>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  {% else %}
+    <hr>
+    <p><em><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to leave a comment.</em></p>
+  {% endif %}
+
+
   <a href="{% url 'manager:task-list' %}" class="btn btn-outline-secondary mt-3">Back to list</a>
 {% endblock %}
