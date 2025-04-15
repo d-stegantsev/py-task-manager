@@ -47,10 +47,8 @@ class Task(models.Model):
         default=Status.NEW
     )
     priority = models.CharField(max_length=10)
-
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
-
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE, related_name="tasks")
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -72,9 +70,8 @@ class Task(models.Model):
 class Comment(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
 
     def __str__(self):
         return f"Comment by {self.created_by} on {self.task}"
