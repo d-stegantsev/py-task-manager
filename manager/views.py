@@ -42,7 +42,6 @@ class TaskListView(ListView):
         return context
 
 
-
 class TaskDetailView(FormMixin, DetailView):
     model = Task
     template_name = "manager/task_detail.html"
@@ -54,6 +53,7 @@ class TaskDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["project"] = self.object.project
         context["form"] = self.get_form()
         context["comments"] = Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time")
         return context
@@ -115,7 +115,9 @@ class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskForm
     template_name = "manager/task_form.html"
-    success_url = reverse_lazy("manager:task-list")
+
+    def get_success_url(self):
+        return reverse("manager:task-detail", kwargs={"pk": self.object.pk})
 
 
 class SignUpView(CreateView):
