@@ -13,6 +13,15 @@ class ProjectListView(ListView):
     template_name = "manager/project_list.html"
     context_object_name = "projects"
 
+    def get_queryset(self):
+        queryset = super().get_queryset().prefetch_related("tasks")
+        for project in queryset:
+            project.total_tasks = project.tasks.count()
+            project.tasks_new = project.tasks.filter(status="new").count()
+            project.tasks_in_progress = project.tasks.filter(status="in_progress").count()
+            project.tasks_done = project.tasks.filter(status="done").count()
+        return queryset
+
 
 class ProjectCreateView(CreateView):
     model = Project

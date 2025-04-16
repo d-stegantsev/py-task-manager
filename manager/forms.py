@@ -39,7 +39,8 @@ class TaskForm(forms.ModelForm):
         ]
         widgets = {
             "deadline": forms.DateInput(attrs={"type": "date"}),
-            "description": forms.Textarea(attrs={"rows": 3}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"rows": 5, "class": "form-control"}),
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
