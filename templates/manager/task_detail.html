@@ -52,5 +52,6 @@
   {% endif %}
 
 
-  <a href="{% url 'manager:task-list' %}" class="btn btn-outline-secondary mt-3">Back to list</a>
+  <a href="{% url 'manager:task-list' project_id=task.project.id %}" class="btn btn-outline-secondary mt-3">Back to
+    project</a>
 {% endblock %}

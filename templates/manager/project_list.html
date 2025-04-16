@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Projects</h2>
+<ul class="list-group">
+  {% for project in projects %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{% url 'manager:task-list' project.id %}">{{ project.name }}</a>
+    </li>
+  {% empty %}
+    <li class="list-group-item">No projects available.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

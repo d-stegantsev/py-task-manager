@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Position, Worker, TaskType, Task, Tag, Comment
+from .models import Position, Worker, TaskType, Task, Tag, Comment, Project
 
 
 @admin.register(Position)
@@ -41,3 +41,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ("id", "task", "created_by", "created_time")
     search_fields = ("content",)
     list_filter = ("created_time",)
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "description")
+    search_fields = ("name",)

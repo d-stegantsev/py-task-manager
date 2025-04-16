@@ -1,5 +1,5 @@
 from django import forms
-from manager.models import Comment
+from manager.models import Comment, Task
 
 
 class CommentForm(forms.ModelForm):
@@ -15,14 +15,11 @@ class CommentForm(forms.ModelForm):
         }
 
 
-from django import forms
-from manager.models import Task
-
-
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = [
+            "project",  # ← ДОДАЛИ
             "name",
             "description",
             "deadline",
@@ -38,6 +35,4 @@ class TaskForm(forms.ModelForm):
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
-
-
 

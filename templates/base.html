@@ -8,8 +8,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'manager:task-list' %}">Task Manager</a>
-    <a href="{% url 'manager:task-create' %}" class="btn btn-success mb-3">+ Create Task</a>
+    <a class="navbar-brand" href="{% url 'manager:project-list' %}">Task Manager</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto align-items-center">
         {% if user.is_authenticated %}
@@ -36,7 +35,6 @@
     </div>
   </div>
 </nav>
-
 
 <div class="container">
   {% block content %}

@@ -5,7 +5,13 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 
 from manager.forms import CommentForm, TaskForm
-from manager.models import Task, Comment, Worker
+from manager.models import Task, Comment, Worker, Project
+
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = "manager/project_list.html"
+    context_object_name = "projects"
 
 
 class TaskListView(ListView):
@@ -14,7 +20,8 @@ class TaskListView(ListView):
     template_name = "manager/task_list.html"
 
     def get_queryset(self):
-        queryset = Task.objects.select_related("task_type", "created_by").prefetch_related("assignees", "tags")
+        project_id = self.kwargs["project_id"]
+        queryset = Task.objects.filter(project__id=project_id).select_related("task_type", "created_by").prefetch_related("assignees", "tags")
         status = self.request.GET.get("status")
         if status:
             queryset = queryset.filter(status=status)
@@ -22,9 +29,11 @@ class TaskListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["status_filter"] = self.request.GET.get("status", "")
         context["status_choices"] = Task.Status.choices
+        context["status_filter"] = self.request.GET.get("status", "")
+        context["project"] = Project.objects.get(pk=self.kwargs["project_id"])
         return context
+
 
 
 class TaskDetailView(FormMixin, DetailView):
