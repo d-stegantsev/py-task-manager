@@ -14,6 +14,13 @@ class ProjectListView(ListView):
     context_object_name = "projects"
 
 
+class ProjectCreateView(CreateView):
+    model = Project
+    fields = ["name", "description"]
+    template_name = "manager/project_form.html"
+    success_url = reverse_lazy("manager:project-list")
+
+
 class TaskListView(ListView):
     model = Task
     context_object_name = "task_list"
@@ -68,18 +75,40 @@ class TaskCreateView(CreateView):
     model = Task
     form_class = TaskForm
     template_name = "manager/task_form.html"
-    success_url = reverse_lazy("manager:task-list")
 
     def form_valid(self, form):
+        project_id = self.kwargs["project_id"]
+        task_type = form.cleaned_data["task_type"]
+
         form.instance.created_by = self.request.user
+        form.instance.project_id = project_id
 
-        type_name = form.cleaned_data["task_type"].name
-        prefix = "".join(word[0] for word in type_name.split()).upper()
+        prefix = task_type.name[0].upper()
+        existing_numbers = Task.objects.filter(
+            project_id=project_id,
+            task_type=task_type,
+            number__startswith=prefix + "-"
+        ).values_list("number", flat=True)
 
-        count = Task.objects.filter(task_type=form.cleaned_data["task_type"]).count() + 1
-        form.instance.number = f"{prefix}-{count:03d}"
+        used_numbers = []
+        for num in existing_numbers:
+            try:
+                used_numbers.append(int(num.split("-")[1]))
+            except (IndexError, ValueError):
+                continue
+
+        next_number = max(used_numbers, default=0) + 1
+        form.instance.number = f"{prefix}-{next_number:03}"
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = Project.objects.get(pk=self.kwargs["project_id"])
+        return context
+
+    def get_success_url(self):
+        return reverse("manager:task-list", kwargs={"project_id": self.kwargs["project_id"]})
 
 
 class TaskUpdateView(UpdateView):

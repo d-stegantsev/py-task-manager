@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand" href="{% url 'manager:project-list' %}">Task Manager</a>
+
+      {% if request.resolver_match.url_name == "project-list" %}
+        <a href="{% url 'manager:project-create' %}" class="btn btn-outline-light btn-sm ms-3">
+          + Create Project
+        </a>
+      {% endif %}
+
+      {% if project %}
+        <span class="navbar-text text-white ms-3">
+          Project: {{ project.name }}
+        </span>
+        <a href="{% url 'manager:task-create' project.id %}" class="btn btn-success btn-sm ms-3">
+          + Create Task
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav align-items-center">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <span class="nav-link">Hello, {{ user.username }}</span>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link" style="padding: 0; margin: 0;">
+                Logout
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+

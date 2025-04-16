@@ -19,7 +19,7 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = [
-            "project",  # ← ДОДАЛИ
+            "project",
             "name",
             "description",
             "deadline",
