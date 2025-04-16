@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <a href="{% url 'manager:task-update' task.id %}" class="btn btn-outline-warning mt-3">Edit Task</a>
   <h2>{{ task.name }}</h2>
 
   <p><strong>Status:</strong> {{ task.get_status_display }}</p>
