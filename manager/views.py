@@ -54,19 +54,27 @@ class TaskDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["project"] = self.object.project
-        context["form"] = self.get_form()
+        context["form"] = CommentForm()
         context["comments"] = Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time")
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form()
+
+        if "status_update" in request.POST:
+            new_status = request.POST.get("status_update")
+            if new_status in dict(Task.Status.choices):
+                self.object.status = new_status
+                self.object.save()
+            return self.get(request, *args, **kwargs)
+
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.task = self.object
             comment.created_by = self.request.user
             comment.save()
-            return super().form_valid(form)
+            return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
@@ -105,6 +113,7 @@ class TaskCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["project"] = Project.objects.get(pk=self.kwargs["project_id"])
+        context["task"] = self.object if self.object else Task()
         return context
 
     def get_success_url(self):
@@ -115,6 +124,11 @@ class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskForm
     template_name = "manager/task_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["task"] = self.object
+        return context
 
     def get_success_url(self):
         return reverse("manager:task-detail", kwargs={"pk": self.object.pk})

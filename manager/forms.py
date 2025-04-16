@@ -16,6 +16,14 @@ class CommentForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
+    PRIORITY_CHOICES = [
+        ("Low", "Low"),
+        ("Medium", "Medium"),
+        ("High", "High"),
+    ]
+
+    priority = forms.ChoiceField(choices=PRIORITY_CHOICES)
+
     class Meta:
         model = Task
         fields = [
