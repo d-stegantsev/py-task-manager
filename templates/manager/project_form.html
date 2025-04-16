@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Create New Project</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Create</button>
+    <a href="{% url 'manager:project-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
