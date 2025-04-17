@@ -23,11 +23,20 @@
                 </p>
               </div>
 
-              <!-- Права частина: опис -->
+              <!-- Права частина: опис + дати -->
               <div class="w-50 text-end">
                 {% if project.description %}
-                  <p class="text-muted mb-0">{{ project.description }}</p>
+                  <p class="text-muted mb-2">{{ project.description }}</p>
                 {% endif %}
+                <p class="small text-muted mb-0">
+                  Created: {{ project.created|date:"Y-m-d" }}<br>
+                  {% if project.deadline %}
+                    Deadline:
+                    <span class="{% if project.deadline < today %}text-danger{% endif %}">
+                      {{ project.deadline|date:"Y-m-d" }}
+                    </span>
+                  {% endif %}
+                </p>
               </div>
 
             </div>

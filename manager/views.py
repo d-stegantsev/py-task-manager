@@ -1,10 +1,12 @@
+from datetime import date
+
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 
-from manager.forms import CommentForm, TaskForm
+from manager.forms import CommentForm, TaskForm, ProjectForm
 from manager.models import Task, Comment, Worker, Project
 
 
@@ -22,10 +24,15 @@ class ProjectListView(ListView):
             project.tasks_done = project.tasks.filter(status="done").count()
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["today"] = date.today()
+        return context
+
 
 class ProjectCreateView(CreateView):
     model = Project
-    fields = ["name", "description"]
+    form_class = ProjectForm
     template_name = "manager/project_form.html"
     success_url = reverse_lazy("manager:project-list")
 

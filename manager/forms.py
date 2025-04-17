@@ -1,5 +1,16 @@
 from django import forms
-from manager.models import Comment, Task
+from manager.models import Comment, Task, Project
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ["name", "description", "deadline"]
+        widgets = {
+            "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+        }
+
 
 
 class CommentForm(forms.ModelForm):
