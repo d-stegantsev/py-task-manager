@@ -48,3 +48,9 @@ body {
   background-color: #12aed7;
   color: white;
 }
+
+/* --- Body --- */
+body.with-fixed-navbar-footer {
+  padding-top: 90px;
+  padding-bottom: 30px;
+}
