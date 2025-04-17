@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 
 from manager.forms import CommentForm, TaskForm, ProjectForm
-from manager.models import Task, Comment, Worker, Project
+from manager.models import Task, Comment, Worker, Project, TaskType
 
 
 class ProjectListView(ListView):
@@ -44,18 +44,47 @@ class TaskListView(ListView):
 
     def get_queryset(self):
         project_id = self.kwargs["project_id"]
-        queryset = Task.objects.filter(project__id=project_id).select_related("task_type", "created_by").prefetch_related("assignees", "tags")
+        queryset = Task.objects.filter(project_id=project_id).select_related(
+            "task_type",
+            "created_by"
+        ).prefetch_related(
+            "assignees",
+            "tags"
+        )
+
         status = self.request.GET.get("status")
+        priority = self.request.GET.get("priority")
+        task_type = self.request.GET.get("task_type")
+
         if status:
             queryset = queryset.filter(status=status)
+        if priority:
+            queryset = queryset.filter(priority=priority)
+        if task_type:
+            queryset = queryset.filter(task_type_id=task_type)
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["status_choices"] = Task.Status.choices
         context["status_filter"] = self.request.GET.get("status", "")
+        context["priority_filter"] = self.request.GET.get("priority", "")
+        context["task_type_filter"] = self.request.GET.get("task_type", "")
         context["project"] = Project.objects.get(pk=self.kwargs["project_id"])
+        context["task_types"] = TaskType.objects.all()
+        context["priority_choices"] = ["High", "Medium", "Low"]
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.htmx:
+            return self.response_class(
+                request=self.request,
+                template="manager/includes/task_list_content.html",
+                context=context,
+                **response_kwargs
+            )
+        return super().render_to_response(context, **response_kwargs)
 
 
 class TaskDetailView(FormMixin, DetailView):

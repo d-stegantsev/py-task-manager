@@ -1,0 +1,29 @@
+<div class="row">
+  {% for status_key, status_label in status_choices %}
+    <div class="col-md-4">
+      <h5 class="text-center">{{ status_label }}</h5>
+      {% for task in task_list %}
+        {% if task.status == status_key %}
+          <a href="{% url 'manager:task-detail' task.id %}" class="text-decoration-none text-dark">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">{{ task.name }}</h5>
+                <p class="card-text small">
+                  <strong>Type:</strong> {{ task.task_type.name }}<br>
+                  <strong>Deadline:</strong> {{ task.deadline }}<br>
+                  <strong>Priority:</strong> {{ task.priority }}<br>
+                  <strong>Assignees:</strong>
+                  {% for user in task.assignees.all %}
+                    {{ user.username }}{% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    <em>None</em>
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
