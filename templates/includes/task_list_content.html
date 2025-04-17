@@ -5,7 +5,7 @@
       {% for task in task_list %}
         {% if task.status == status_key %}
           <a href="{% url 'manager:task-detail' task.id %}" class="text-decoration-none text-dark">
-            <div class="card mb-3 shadow-sm">
+            <div class="card card-bordered mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{ task.name }}</h5>
                 <p class="card-text small">

@@ -7,7 +7,7 @@
     <div class="d-flex flex-column gap-3">
       {% for project in projects %}
         <a href="{% url 'manager:task-list' project.id %}" class="text-decoration-none text-dark">
-          <div class="card project-card shadow-sm hover-shadow">
+          <div class="card card-bordered">
             <div class="card-body d-flex justify-content-between">
 
               <!-- Ліва частина: назва + статистика -->
