@@ -9,47 +9,50 @@
           + Create Project
         </a>
       {% endif %}
-      {% if project %}
-        <form id="task-filter-form"
-              class="d-flex align-items-center ms-3 gap-2"
-              hx-get="{% url 'manager:task-list' project.id %}"
-              hx-target="#task-list-container"
-              hx-include="#task-filter-form"
-        >
-          <select name="status" class="form-select form-select-sm">
-            <option value="">Status</option>
-            {% for key, label in status_choices %}
-              <option value="{{ key }}" {% if key == status_filter %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-          </select>
-
-          <select name="priority" class="form-select form-select-sm">
-            <option value="">Priority</option>
-            {% for p in priority_choices %}
-              <option value="{{ p }}" {% if p == priority_filter %}selected{% endif %}>{{ p }}</option>
-            {% endfor %}
-          </select>
-
-          <select name="task_type" class="form-select form-select-sm">
-            <option value="">Type</option>
-            {% for type in task_types %}
-              <option value="{{ type.id }}" {% if type.id|stringformat:"s" == task_type_filter %}selected{% endif %}>
-                {{ type.name }}
-              </option>
-            {% endfor %}
-          </select>
-        </form>
-      {% endif %}
 
       {% if project %}
         <span class="navbar-text text-white ms-3">
-          Project: {{ project.name }}
-        </span>
-        <a href="{% url 'manager:task-create' project.id %}" class="btn btn-success btn-sm ms-3">
+      Project: {{ project.name }}
+    </span>
+
+        <a href="{% url 'manager:task-create' project.id %}" class="btn btn-outline-light btn-sm ms-3">
           + Create Task
         </a>
+
+        {% if request.resolver_match.url_name == "task-list" %}
+          <form id="task-filter-form"
+                class="d-flex align-items-center ms-3 gap-2"
+                hx-get="{% url 'manager:task-list' project.id %}"
+                hx-target="#task-list-container"
+                hx-include="#task-filter-form"
+          >
+            <select name="status" class="form-select form-select-sm bg-dark text-white border-light">
+              <option value="">Status</option>
+              {% for key, label in status_choices %}
+                <option value="{{ key }}" {% if key == status_filter %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+
+            <select name="priority" class="form-select form-select-sm bg-dark text-white border-light">
+              <option value="">Priority</option>
+              {% for p in priority_choices %}
+                <option value="{{ p }}" {% if p == priority_filter %}selected{% endif %}>{{ p }}</option>
+              {% endfor %}
+            </select>
+
+            <select name="task_type" class="form-select form-select-sm bg-dark text-white border-light">
+              <option value="">Type</option>
+              {% for type in task_types %}
+                <option value="{{ type.id }}" {% if type.id|stringformat:"s" == task_type_filter %}selected{% endif %}>
+                  {{ type.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </form>
+        {% endif %}
       {% endif %}
     </div>
+
 
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav align-items-center">
