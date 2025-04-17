@@ -33,7 +33,10 @@ class TaskForm(forms.ModelForm):
         ("High", "High"),
     ]
 
-    priority = forms.ChoiceField(choices=PRIORITY_CHOICES)
+    priority = forms.ChoiceField(
+        choices=PRIORITY_CHOICES,
+        widget=forms.Select(attrs={"class": "form-select"})
+    )
 
     class Meta:
         model = Task
@@ -49,9 +52,10 @@ class TaskForm(forms.ModelForm):
             "tags",
         ]
         widgets = {
-            "deadline": forms.DateInput(attrs={"type": "date"}),
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"rows": 5, "class": "form-control"}),
+            "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "status": forms.Select(attrs={"class": "form-select"}),
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
