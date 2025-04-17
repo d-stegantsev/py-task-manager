@@ -10,18 +10,6 @@
   background-color: #f8f9fa;
 }
 
-
-/* --- Status badges (optional) --- */
-.status-new {
-  color: #ffc107; /* yellow */
-}
-.status-in-progress {
-  color: #0dcaf0; /* cyan */
-}
-.status-done {
-  color: #198754; /* green */
-}
-
 /* --- Forms --- */
 form .form-control {
   max-width: 100%;
