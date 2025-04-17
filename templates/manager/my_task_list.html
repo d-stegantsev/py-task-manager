@@ -8,7 +8,7 @@
 
     {% for group in project_groups %}
       <div class="mb-4">
-        <h5 class="text-primary">{{ group.grouper.name }}</h5>
+        <h5 class="fw-semibold text-dark">Project: {{ group.grouper.name }}</h5>
 
         {% for task in group.list %}
           <a href="{% url 'manager:task-detail' task.id %}?from=my-tasks" class="text-decoration-none text-dark">

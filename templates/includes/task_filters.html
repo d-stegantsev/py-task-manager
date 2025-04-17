@@ -1,0 +1,32 @@
+<form id="task-filter-form"
+      class="d-flex align-items-center ms-3 gap-2"
+      hx-get="{{ filter_url }}"
+      hx-target="#task-list-container"
+      hx-include="#task-filter-form"
+      hx-trigger="change"
+>
+  <select name="status" class="form-select form-select-sm bg-dark text-white border-light">
+    <option value="">Status</option>
+    {% for key, label in status_choices %}
+      <option value="{{ key }}" {% if key == status_filter %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+
+  <select name="priority" class="form-select form-select-sm bg-dark text-white border-light">
+    <option value="">Priority</option>
+    {% for p in priority_choices %}
+      <option value="{{ p }}" {% if p == priority_filter %}selected{% endif %}>{{ p }}</option>
+    {% endfor %}
+  </select>
+
+  {% if task_types %}
+    <select name="task_type" class="form-select form-select-sm bg-dark text-white border-light">
+      <option value="">Type</option>
+      {% for type in task_types %}
+        <option value="{{ type.id }}" {% if type.id|stringformat:"s" == task_type_filter %}selected{% endif %}>
+          {{ type.name }}
+        </option>
+      {% endfor %}
+    </select>
+  {% endif %}
+</form>

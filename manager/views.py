@@ -80,7 +80,7 @@ class TaskListView(ListView):
         if self.request.htmx:
             return self.response_class(
                 request=self.request,
-                template="manager/includes/task_list_content.html",
+                template="includes/task_list_content.html",  # <-- змінив шлях
                 context=context,
                 **response_kwargs
             )
@@ -206,11 +206,41 @@ class MyTaskListView(ListView):
     context_object_name = "task_list"
 
     def get_queryset(self):
-        return Task.objects.filter(
+        queryset = Task.objects.filter(
             assignees=self.request.user
         ).select_related("project", "task_type").order_by("project__name", "deadline")
+
+        status = self.request.GET.get("status")
+        priority = self.request.GET.get("priority")
+        task_type = self.request.GET.get("task_type")
+
+        if status:
+            queryset = queryset.filter(status=status)
+        if priority:
+            queryset = queryset.filter(priority=priority)
+        if task_type:
+            queryset = queryset.filter(task_type_id=task_type)
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["status_choices"] = Task.Status.choices
+        context["priority_choices"] = ["High", "Medium", "Low"]
+        context["status_filter"] = self.request.GET.get("status", "")
+        context["priority_filter"] = self.request.GET.get("priority", "")
+        context["task_type_filter"] = self.request.GET.get("task_type", "")
+        context["task_types"] = TaskType.objects.all()
+        context["filter_url"] = reverse("manager:my-tasks")
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.htmx:
+            return self.response_class(
+                request=self.request,
+                template="includes/task_list_content.html",
+                context=context,
+                **response_kwargs
+            )
+        return super().render_to_response(context, **response_kwargs)
+
