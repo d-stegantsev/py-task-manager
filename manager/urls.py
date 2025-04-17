@@ -6,6 +6,7 @@ from manager.views import (
     TaskDetailView,
     TaskCreateView,
     TaskUpdateView,
+    MyTaskListView,
     # MyTaskListView,
     # TaskDeleteView,
 )
@@ -27,4 +28,6 @@ urlpatterns = [
 
     # path("tasks/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
     # path("my-tasks/", MyTaskListView.as_view(), name="my-tasks"),
+    path("my-tasks/", MyTaskListView.as_view(), name="my-tasks"),
+
 ]

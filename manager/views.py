@@ -160,3 +160,18 @@ class SignUpView(CreateView):
         response = super().form_valid(form)
         login(self.request, self.object)
         return response
+
+
+class MyTaskListView(ListView):
+    model = Task
+    template_name = "manager/my_task_list.html"
+    context_object_name = "task_list"
+
+    def get_queryset(self):
+        return Task.objects.filter(assignees=self.request.user).select_related("task_type", "project").order_by("deadline")
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["status_choices"] = Task.Status.choices
+        return context
