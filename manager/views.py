@@ -72,6 +72,7 @@ class TaskDetailView(FormMixin, DetailView):
         context["project"] = self.object.project
         context["form"] = CommentForm()
         context["comments"] = Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time")
+        context["came_from"] = self.request.GET.get("from", "")
         return context
 
     def post(self, request, *args, **kwargs):
@@ -176,8 +177,9 @@ class MyTaskListView(ListView):
     context_object_name = "task_list"
 
     def get_queryset(self):
-        return Task.objects.filter(assignees=self.request.user).select_related("task_type", "project").order_by("deadline")
-
+        return Task.objects.filter(
+            assignees=self.request.user
+        ).select_related("project", "task_type").order_by("project__name", "deadline")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
