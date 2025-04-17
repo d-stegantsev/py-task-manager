@@ -8,7 +8,7 @@
 
       <!-- Ліва колонка: Кнопки -->
       <div class="col-md-2">
-        <button type="submit" class="btn btn-success w-100 mb-2">Save</button>
+        <button type="submit" class="btn btn-secondary w-100 mb-2 text-white">Save</button>
 
         {% if task.pk %}
           <a href="{% url 'manager:task-detail' task.id %}" class="btn btn-outline-secondary w-100 mb-2">Cancel</a>

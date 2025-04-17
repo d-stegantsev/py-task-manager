@@ -5,7 +5,7 @@
   <div class="row">
     <!-- Ліва колонка з кнопками -->
     <div class="col-md-2">
-      <a href="{% url 'manager:task-update' task.id %}" class="btn btn-outline-warning w-100 mb-2">Edit Task</a>
+      <a href="{% url 'manager:task-update' task.id %}" class="btn btn-secondary w-100 mb-2 text-white">Edit Task</a>
       {% if came_from == "my-tasks" %}
         <a href="{% url 'manager:my-tasks' %}" class="btn btn-outline-secondary w-100">Back to my tasks</a>
       {% else %}
@@ -37,7 +37,7 @@
         <form method="post">
           {% csrf_token %}
           {{ form|crispy }}
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-outline-secondary">Submit</button>
         </form>
       {% else %}
         <hr>
@@ -81,7 +81,7 @@
                   </option>
                 {% endfor %}
               </select>
-              <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Update</button>
             </form>
           {% endif %}
         </div>
