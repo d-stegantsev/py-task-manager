@@ -5,6 +5,8 @@
       hx-include="#task-filter-form"
       hx-trigger="change"
 >
+<span class="navbar-text text-white ms-3">Filters:</span>
+
   <select name="status" class="form-select form-select-sm bg-dark text-white border-light">
     <option value="">Status</option>
     {% for key, label in status_choices %}

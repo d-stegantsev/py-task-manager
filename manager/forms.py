@@ -12,7 +12,6 @@ class ProjectForm(forms.ModelForm):
         }
 
 
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -53,10 +52,12 @@ class TaskForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"rows": 5, "class": "form-control"}),
-            "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "deadline": forms.DateInput(attrs={
+                "type": "date",
+                "class": "date-button",
+                "id": "deadline",
+            }),
             "status": forms.Select(attrs={"class": "form-select"}),
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
-
-
