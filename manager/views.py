@@ -18,6 +18,7 @@ class ProjectListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset().prefetch_related("tasks")
         for project in queryset:
+            # Annotate project with task counts
             project.total_tasks = project.tasks.count()
             project.tasks_new = project.tasks.filter(status="new").count()
             project.tasks_in_progress = project.tasks.filter(status="in_progress").count()
@@ -37,21 +38,10 @@ class ProjectCreateView(CreateView):
     success_url = reverse_lazy("manager:project-list")
 
 
-class TaskListView(ListView):
-    model = Task
-    context_object_name = "task_list"
-    template_name = "manager/task_list.html"
+class FilteredTaskListMixin:
+    """Mixin for filtering tasks by status, priority, and type."""
 
-    def get_queryset(self):
-        project_id = self.kwargs["project_id"]
-        queryset = Task.objects.filter(project_id=project_id).select_related(
-            "task_type",
-            "created_by"
-        ).prefetch_related(
-            "assignees",
-            "tags"
-        )
-
+    def filter_tasks(self, queryset):
         status = self.request.GET.get("status")
         priority = self.request.GET.get("priority")
         task_type = self.request.GET.get("task_type")
@@ -65,22 +55,37 @@ class TaskListView(ListView):
 
         return queryset
 
+
+class TaskListView(FilteredTaskListMixin, ListView):
+    model = Task
+    context_object_name = "task_list"
+    template_name = "manager/task_list.html"
+
+    def get_queryset(self):
+        project_id = self.kwargs["project_id"]
+        queryset = Task.objects.filter(project_id=project_id).select_related(
+            "task_type", "created_by"
+        ).prefetch_related("assignees", "tags")
+        return self.filter_tasks(queryset)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["status_choices"] = Task.Status.choices
-        context["status_filter"] = self.request.GET.get("status", "")
-        context["priority_filter"] = self.request.GET.get("priority", "")
-        context["task_type_filter"] = self.request.GET.get("task_type", "")
-        context["project"] = Project.objects.get(pk=self.kwargs["project_id"])
-        context["task_types"] = TaskType.objects.all()
-        context["priority_choices"] = ["High", "Medium", "Low"]
+        context.update({
+            "status_choices": Task.Status.choices,
+            "priority_choices": ["High", "Medium", "Low"],
+            "status_filter": self.request.GET.get("status", ""),
+            "priority_filter": self.request.GET.get("priority", ""),
+            "task_type_filter": self.request.GET.get("task_type", ""),
+            "task_types": TaskType.objects.all(),
+            "project": Project.objects.get(pk=self.kwargs["project_id"]),
+        })
         return context
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.htmx:
             return self.response_class(
                 request=self.request,
-                template="includes/task_list_content.html",  # <-- змінив шлях
+                template="includes/task_list_content.html",
                 context=context,
                 **response_kwargs
             )
@@ -98,10 +103,12 @@ class TaskDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["project"] = self.object.project
-        context["form"] = CommentForm()
-        context["comments"] = Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time")
-        context["came_from"] = self.request.GET.get("from", "")
+        context.update({
+            "project": self.object.project,
+            "form": CommentForm(),
+            "comments": Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time"),
+            "came_from": self.request.GET.get("from", ""),
+        })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -118,11 +125,10 @@ class TaskDetailView(FormMixin, DetailView):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.task = self.object
-            comment.created_by = self.request.user
+            comment.created_by = request.user
             comment.save()
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return self.form_invalid(form)
 
 
 class TaskCreateView(CreateView):
@@ -141,7 +147,7 @@ class TaskCreateView(CreateView):
         existing_numbers = Task.objects.filter(
             project_id=project_id,
             task_type=task_type,
-            number__startswith=prefix + "-"
+            number__startswith=f"{prefix}-"
         ).values_list("number", flat=True)
 
         used_numbers = []
@@ -192,7 +198,7 @@ class SignUpView(CreateView):
         return response
 
 
-class MyTaskListView(ListView):
+class MyTaskListView(FilteredTaskListMixin, ListView):
     model = Task
     template_name = "manager/my_task_list.html"
     context_object_name = "task_list"
@@ -201,29 +207,19 @@ class MyTaskListView(ListView):
         queryset = Task.objects.filter(
             assignees=self.request.user
         ).select_related("project", "task_type").order_by("project__name", "deadline")
-
-        status = self.request.GET.get("status")
-        priority = self.request.GET.get("priority")
-        task_type = self.request.GET.get("task_type")
-
-        if status:
-            queryset = queryset.filter(status=status)
-        if priority:
-            queryset = queryset.filter(priority=priority)
-        if task_type:
-            queryset = queryset.filter(task_type_id=task_type)
-
-        return queryset
+        return self.filter_tasks(queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["status_choices"] = Task.Status.choices
-        context["priority_choices"] = ["High", "Medium", "Low"]
-        context["status_filter"] = self.request.GET.get("status", "")
-        context["priority_filter"] = self.request.GET.get("priority", "")
-        context["task_type_filter"] = self.request.GET.get("task_type", "")
-        context["task_types"] = TaskType.objects.all()
-        context["filter_url"] = reverse("manager:my-tasks")
+        context.update({
+            "status_choices": Task.Status.choices,
+            "priority_choices": ["High", "Medium", "Low"],
+            "status_filter": self.request.GET.get("status", ""),
+            "priority_filter": self.request.GET.get("priority", ""),
+            "task_type_filter": self.request.GET.get("task_type", ""),
+            "task_types": TaskType.objects.all(),
+            "filter_url": reverse("manager:my-tasks"),
+        })
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -235,4 +231,3 @@ class MyTaskListView(ListView):
                 **response_kwargs
             )
         return super().render_to_response(context, **response_kwargs)
-

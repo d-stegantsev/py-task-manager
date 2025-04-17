@@ -1,7 +1,7 @@
 from django import forms
 from manager.models import Comment, Task, Project
 
-
+# Project creation/edit form
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
@@ -11,7 +11,7 @@ class ProjectForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
         }
 
-
+# Comment form for tasks
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -21,17 +21,16 @@ class CommentForm(forms.ModelForm):
                 "class": "form-control",
                 "rows": 3,
                 "placeholder": "Write a comment..."
-            })
+            }),
         }
 
-
+# Task creation/update form
 class TaskForm(forms.ModelForm):
     PRIORITY_CHOICES = [
         ("Low", "Low"),
         ("Medium", "Medium"),
         ("High", "High"),
     ]
-
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,
         widget=forms.Select(attrs={"class": "form-select"})

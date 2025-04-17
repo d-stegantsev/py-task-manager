@@ -4,11 +4,14 @@
   <h2 class="mb-4">My Tasks</h2>
 
   {% if task_list %}
+    {# Group tasks by project #}
     {% regroup task_list by project as project_groups %}
 
     {% for group in project_groups %}
       <div class="mb-5">
-        <h6 class="text-muted fw-semibold mb-2">Project: {{ group.grouper.name }}</h6>
+        <h6 class="text-muted fw-semibold mb-2">
+          Project: {{ group.grouper.name }}
+        </h6>
 
         {% for task in group.list %}
           <a href="{% url 'manager:task-detail' task.id %}?from=my-tasks" class="text-decoration-none text-dark">
@@ -29,6 +32,8 @@
     {% endfor %}
 
   {% else %}
-    <div class="alert alert-info">You don't have any assigned tasks.</div>
+    <div class="alert alert-info">
+      You don't have any assigned tasks.
+    </div>
   {% endif %}
 {% endblock %}

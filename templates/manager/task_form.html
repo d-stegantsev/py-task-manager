@@ -6,7 +6,7 @@
     {% csrf_token %}
     <div class="row">
 
-      <!-- Ліва колонка: Кнопки -->
+      <!-- Left column: form buttons -->
       <div class="col-md-2">
         <button type="submit" class="btn btn-main w-100 mb-2">Save</button>
 
@@ -17,7 +17,7 @@
         {% endif %}
       </div>
 
-      <!-- Центр: Назва + опис -->
+      <!-- Center column: title, description -->
       <div class="col-md-7">
         <h2 class="mb-3">
           {% if task.pk %}Edit Task{% else %}Create Task{% endif %}
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <!-- Права колонка: решта полів -->
+      <!-- Right column: task metadata -->
       <div class="col-md-3">
         <div class="card">
           <div class="card-body">
@@ -75,7 +75,6 @@
               {{ form.assignees.label_tag }}
               {{ form.assignees }}
             </div>
-
           </div>
         </div>
       </div>

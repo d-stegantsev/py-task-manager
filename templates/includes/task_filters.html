@@ -3,10 +3,11 @@
       hx-get="{{ filter_url }}"
       hx-target="#task-list-container"
       hx-include="#task-filter-form"
-      hx-trigger="change"
->
-<span class="navbar-text text-white ms-3">Filters:</span>
+      hx-trigger="change">
 
+  <span class="navbar-text text-white ms-3">Filters:</span>
+
+  <!-- Filter by Status -->
   <select name="status" class="form-select form-select-sm bg-dark text-white border-light">
     <option value="">Status</option>
     {% for key, label in status_choices %}
@@ -14,6 +15,7 @@
     {% endfor %}
   </select>
 
+  <!-- Filter by Priority -->
   <select name="priority" class="form-select form-select-sm bg-dark text-white border-light">
     <option value="">Priority</option>
     {% for p in priority_choices %}
@@ -21,6 +23,7 @@
     {% endfor %}
   </select>
 
+  <!-- Filter by Task Type -->
   {% if task_types %}
     <select name="task_type" class="form-select form-select-sm bg-dark text-white border-light">
       <option value="">Type</option>

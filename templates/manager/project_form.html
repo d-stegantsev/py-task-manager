@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 
 {% block content %}
   <h2>Create New Project</h2>
+
   <form method="post">
     {% csrf_token %}
     {{ form|crispy }}
+
     <button type="submit" class="btn btn-main">Create</button>
     <a href="{% url 'manager:project-list' %}" class="btn btn-outline-main">Cancel</a>
   </form>

@@ -1,6 +1,6 @@
-/* --- Universal card styling --- */
+/* --- Card Styling --- */
 .card-bordered {
-  border-left: 5px solid #12aed7; /* Gray */
+  border-left: 5px solid #12aed7;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
@@ -10,22 +10,22 @@
   background-color: #f8f9fa;
 }
 
-/* --- Forms --- */
+/* --- Form Controls --- */
 form .form-control {
   max-width: 100%;
 }
 
-/* --- Align buttons --- */
+/* --- Full Width Buttons --- */
 .btn-wide {
   width: 100%;
 }
 
-/* --- Misc --- */
+/* --- Page Background --- */
 body {
   background-color: #fefefe;
 }
 
-/* --- Custom buttons --- */
+/* --- Primary Button --- */
 .btn-main {
   background-color: #12aed7;
   color: white;
@@ -37,6 +37,7 @@ body {
   color: white;
 }
 
+/* --- Outline Button --- */
 .btn-outline-main {
   background-color: transparent;
   color: #12aed7;
