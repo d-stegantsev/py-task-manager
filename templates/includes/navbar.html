@@ -25,7 +25,9 @@
                 hx-get="{% url 'manager:task-list' project.id %}"
                 hx-target="#task-list-container"
                 hx-include="#task-filter-form"
+                hx-trigger="change"
           >
+
             <select name="status" class="form-select form-select-sm bg-dark text-white border-light">
               <option value="">Status</option>
               {% for key, label in status_choices %}
