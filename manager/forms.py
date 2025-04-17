@@ -41,7 +41,6 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = [
-            "project",
             "name",
             "description",
             "deadline",
@@ -59,4 +58,5 @@ class TaskForm(forms.ModelForm):
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
+
 

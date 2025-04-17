@@ -135,6 +135,10 @@ class TaskCreateView(CreateView):
     def get_success_url(self):
         return reverse("manager:task-list", kwargs={"project_id": self.kwargs["project_id"]})
 
+    def form_invalid(self, form):
+        print("FORM ERRORS (CREATE):", form.errors)
+        return super().form_invalid(form)
+
 
 class TaskUpdateView(UpdateView):
     model = Task
@@ -148,6 +152,10 @@ class TaskUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("manager:task-detail", kwargs={"pk": self.object.pk})
+
+    def form_invalid(self, form):
+        print("FORM ERRORS (UPDATE):", form.errors)
+        return super().form_invalid(form)
 
 
 class SignUpView(CreateView):
