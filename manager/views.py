@@ -1,9 +1,8 @@
 from datetime import date
 
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 
@@ -79,6 +78,7 @@ class TaskListView(FilteredTaskListMixin, ListView):
             "task_type_filter": self.request.GET.get("task_type", ""),
             "task_types": TaskType.objects.all(),
             "project": Project.objects.get(pk=self.kwargs["project_id"]),
+            "now": timezone.now(),
         })
         return context
 
@@ -107,8 +107,12 @@ class TaskDetailView(FormMixin, DetailView):
         context.update({
             "project": self.object.project,
             "form": CommentForm(),
-            "comments": Comment.objects.filter(task=self.object).select_related("created_by").order_by("-created_time"),
+            "comments": Comment.objects
+            .filter(task=self.object)
+            .select_related("created_by")
+            .order_by("-created_time"),
             "came_from": self.request.GET.get("from", ""),
+            "now": timezone.now(),
         })
         return context
 
@@ -206,6 +210,7 @@ class MyTaskListView(FilteredTaskListMixin, ListView):
             "task_type_filter": self.request.GET.get("task_type", ""),
             "task_types": TaskType.objects.all(),
             "filter_url": reverse("manager:my-tasks"),
+            "now": timezone.now(),
         })
         return context
 

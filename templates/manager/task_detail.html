@@ -18,9 +18,9 @@
     <!-- Middle column: description and comments -->
     <div class="col-md-7">
       <h2 class="mb-3">
-  <span class="text-muted" style="font-size: 0.75em; margin-right: 4px;">{{ task.number }}</span>
-  {{ task.name }}
-</h2>
+        <span class="text-muted" style="font-size: 0.75em; margin-right: 4px;">{{ task.number }}</span>
+        {{ task.name }}
+      </h2>
 
       <p><strong>Description:</strong> {{ task.description }}</p>
 
@@ -59,7 +59,13 @@
           <p><strong>Status:</strong> {{ task.get_status_display }}</p>
           <p><strong>Type:</strong> {{ task.task_type.name }}</p>
           <p><strong>Priority:</strong> {{ task.priority }}</p>
-          <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+          <p>
+            <strong>Deadline:</strong>
+            <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
+              {{ task.deadline|date:"Y-m-d H:i" }}
+            </span>
+          </p>
+
 
           <p><strong>Assignees:</strong>
             {% for user in task.assignees.all %}

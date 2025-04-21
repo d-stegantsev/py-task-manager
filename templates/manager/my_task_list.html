@@ -22,7 +22,10 @@
                 </h5>
                 <p class="small mb-0">
                   <strong>Status:</strong> {{ task.get_status_display }} |
-                  <strong>Deadline:</strong> {{ task.deadline }} |
+                  <strong>Deadline:</strong>
+                  <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
+                    {{ task.deadline|date:"Y-m-d H:i" }}
+                  </span> |
                   <strong>Type:</strong> {{ task.task_type.name }} |
                   <strong>Priority:</strong> {{ task.priority }}
                 </p>

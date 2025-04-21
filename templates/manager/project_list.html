@@ -32,11 +32,12 @@
                   Created: {{ project.created|date:"Y-m-d" }}<br>
                   {% if project.deadline %}
                     Deadline:
-                    <span class="{% if project.deadline < today %}text-danger{% endif %}">
+                    <span class="{% if project.deadline < today %}text-danger fw-bold{% endif %}">
                       {{ project.deadline|date:"Y-m-d" }}
                     </span>
                   {% endif %}
                 </p>
+
               </div>
 
             </div>

@@ -13,7 +13,12 @@
                 </h5>
                 <p class="card-text small">
                   <strong>Type:</strong> {{ task.task_type.name }}<br>
-                  <strong>Deadline:</strong> {{ task.deadline }}<br>
+                  <strong>Deadline:</strong>
+                  <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
+                    {{ task.deadline|date:"Y-m-d H:i" }}
+                  </span><br>
+
+
                   <strong>Priority:</strong> {{ task.priority }}<br>
                   <strong>Assignees:</strong>
                   {% for user in task.assignees.all %}
