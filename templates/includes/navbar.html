@@ -34,7 +34,7 @@
             <a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a>
           </li>
           <li class="nav-item">
-            <form method="post" action="{% url 'logout' %}">
+            <form method="post" action="{% url 'logout' %}?next={{ request.path }}">
               {% csrf_token %}
               <button type="submit" class="btn btn-link nav-link" style="padding: 0; margin: 0;">
                 Logout
@@ -46,7 +46,7 @@
             <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login</a>
+            <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
           </li>
         {% endif %}
       </ul>
