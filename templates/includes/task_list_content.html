@@ -8,8 +8,9 @@
           <a href="{% url 'manager:task-detail' task.id %}" class="text-decoration-none text-dark">
             <div class="card card-bordered mb-3">
               <div class="card-body">
-                <h5 class="card-title">{{ task.name }}</h5>
-
+                <h5 class="card-title">
+                  <span class="task-number">{{ task.number }}</span> {{ task.name }}
+                </h5>
                 <p class="card-text small">
                   <strong>Type:</strong> {{ task.task_type.name }}<br>
                   <strong>Deadline:</strong> {{ task.deadline }}<br>

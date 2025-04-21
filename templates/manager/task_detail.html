@@ -10,20 +10,26 @@
       {% if came_from == "my-tasks" %}
         <a href="{% url 'manager:my-tasks' %}" class="btn btn-outline-main w-100">Back to my tasks</a>
       {% else %}
-        <a href="{% url 'manager:task-list' project_id=task.project.id %}" class="btn btn-outline-main w-100">Back to project</a>
+        <a href="{% url 'manager:task-list' project_id=task.project.id %}" class="btn btn-outline-main w-100">Back to
+          project</a>
       {% endif %}
     </div>
 
     <!-- Middle column: description and comments -->
     <div class="col-md-7">
-      <h2>{{ task.name }}</h2>
+      <h2 class="mb-3">
+  <span class="text-muted" style="font-size: 0.75em; margin-right: 4px;">{{ task.number }}</span>
+  {{ task.name }}
+</h2>
+
       <p><strong>Description:</strong> {{ task.description }}</p>
 
       <hr>
       <h5>Comments</h5>
       {% for comment in comments %}
         <div class="mb-2 p-2 border rounded">
-          <small><strong>{{ comment.created_by.username }}</strong> — {{ comment.created_time|date:"Y-m-d H:i" }}</small>
+          <small><strong>{{ comment.created_by.username }}</strong> — {{ comment.created_time|date:"Y-m-d H:i" }}
+          </small>
           <p class="mb-0">{{ comment.content }}</p>
         </div>
       {% empty %}

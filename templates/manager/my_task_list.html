@@ -17,7 +17,9 @@
           <a href="{% url 'manager:task-detail' task.id %}?from=my-tasks" class="text-decoration-none text-dark">
             <div class="card card-bordered mb-2">
               <div class="card-body">
-                <h6 class="card-title mb-1">{{ task.name }}</h6>
+                <h5 class="card-title mb-1">
+                  <span class="task-number">{{ task.number }}</span> {{ task.name }}
+                </h5>
                 <p class="small mb-0">
                   <strong>Status:</strong> {{ task.get_status_display }} |
                   <strong>Deadline:</strong> {{ task.deadline }} |
