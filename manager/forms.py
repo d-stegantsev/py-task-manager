@@ -27,15 +27,6 @@ class CommentForm(forms.ModelForm):
         }
 
 
-# Task creation/update form
-from django import forms
-from manager.models import Task
-
-
-from django import forms
-from manager.models import Task
-
-
 class TaskForm(forms.ModelForm):
     PRIORITY_CHOICES = [
         ("Low", "Low"),

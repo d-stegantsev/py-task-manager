@@ -2,6 +2,7 @@ from datetime import date
 
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
@@ -31,7 +32,7 @@ class ProjectListView(ListView):
         return context
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
     template_name = "manager/project_form.html"
@@ -131,7 +132,7 @@ class TaskDetailView(FormMixin, DetailView):
         return self.form_invalid(form)
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     form_class = TaskForm
     template_name = "manager/task_form.html"
@@ -139,7 +140,6 @@ class TaskCreateView(CreateView):
     def form_valid(self, form):
         project_id = self.kwargs["project_id"]
         task_type = form.cleaned_data["task_type"]
-
         form.instance.created_by = self.request.user
         form.instance.project_id = project_id
 
@@ -149,7 +149,6 @@ class TaskCreateView(CreateView):
             task_type=task_type,
             number__startswith=f"{prefix}-"
         ).values_list("number", flat=True)
-
         used_numbers = []
         for num in existing_numbers:
             try:
@@ -172,7 +171,7 @@ class TaskCreateView(CreateView):
         return reverse("manager:task-list", kwargs={"project_id": self.object.project_id})
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = "manager/task_form.html"
