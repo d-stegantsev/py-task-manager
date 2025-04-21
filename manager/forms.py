@@ -27,6 +27,7 @@ class CommentForm(forms.ModelForm):
         }
 
 
+# Task creation/edit form
 class TaskForm(forms.ModelForm):
     PRIORITY_CHOICES = [
         ("Low", "Low"),

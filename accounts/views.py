@@ -1,16 +1,14 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from accounts.models import Worker
+from accounts.forms import CustomUserCreationForm
 
 
 class SignUpView(CreateView):
-    model = Worker
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     template_name = "registration/signup.html"
-    success_url = reverse_lazy("manager:task-list")
+    success_url = reverse_lazy("manager:project-list")
 
     def form_valid(self, form):
         response = super().form_valid(form)

@@ -63,9 +63,12 @@ class TaskListView(FilteredTaskListMixin, ListView):
 
     def get_queryset(self):
         project_id = self.kwargs["project_id"]
-        queryset = Task.objects.filter(project_id=project_id).select_related(
-            "task_type", "created_by"
-        ).prefetch_related("assignees", "tags")
+        queryset = (
+            Task.objects
+            .filter(project_id=project_id)
+            .select_related("task_type", "created_by")
+            .prefetch_related("assignees", "tags")
+        )
         return self.filter_tasks(queryset)
 
     def get_context_data(self, **kwargs):
