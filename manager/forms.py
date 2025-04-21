@@ -28,6 +28,14 @@ class CommentForm(forms.ModelForm):
 
 
 # Task creation/update form
+from django import forms
+from manager.models import Task
+
+
+from django import forms
+from manager.models import Task
+
+
 class TaskForm(forms.ModelForm):
     PRIORITY_CHOICES = [
         ("Low", "Low"),
@@ -57,10 +65,16 @@ class TaskForm(forms.ModelForm):
             "deadline": forms.DateTimeInput(
                 attrs={
                     "class": "form-control",
-                    "type": "datetime-local",
-                }
+                    "placeholder": "Pick date and time",
+                },
+                format="%Y-%m-%d %H:%M"
             ),
             "status": forms.Select(attrs={"class": "form-select"}),
             "assignees": forms.CheckboxSelectMultiple,
             "tags": forms.CheckboxSelectMultiple,
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.deadline:
+            self.initial["deadline"] = self.instance.deadline.strftime("%Y-%m-%d %H:%M")
