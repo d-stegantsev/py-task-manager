@@ -20,6 +20,7 @@ INSTALLED_APPS = [
 
     # Local apps
     "manager",
+    "accounts",
 
     # Third-party apps
     "crispy_forms",
@@ -84,7 +85,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Custom user model
-AUTH_USER_MODEL = "manager.Worker"
+AUTH_USER_MODEL = "accounts.Worker"
 
 # Login settings
 LOGIN_URL = "login"

@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 
 from manager.forms import CommentForm, TaskForm, ProjectForm
-from manager.models import Task, Comment, Worker, Project, TaskType
+from manager.models import Task, Comment, Project, TaskType
 
 
 class ProjectListView(ListView):
@@ -184,18 +184,6 @@ class TaskUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("manager:task-detail", kwargs={"pk": self.object.pk})
-
-
-class SignUpView(CreateView):
-    model = Worker
-    form_class = UserCreationForm
-    template_name = "registration/signup.html"
-    success_url = reverse_lazy("manager:task-list")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        login(self.request, self.object)
-        return response
 
 
 class MyTaskListView(FilteredTaskListMixin, ListView):
