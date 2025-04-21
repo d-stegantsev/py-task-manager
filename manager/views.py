@@ -222,7 +222,7 @@ class MyTaskListView(FilteredTaskListMixin, ListView):
         if self.request.htmx:
             return self.response_class(
                 request=self.request,
-                template="includes/task_list_content.html",
+                template="includes/my_task_list_content.html",
                 context=context,
                 **response_kwargs
             )

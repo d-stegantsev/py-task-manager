@@ -3,42 +3,8 @@
 {% block content %}
   <h2 class="mb-4">My Tasks</h2>
 
-  {% if task_list %}
-    {# Group tasks by project #}
-    {% regroup task_list by project as project_groups %}
-
-    {% for group in project_groups %}
-      <div class="mb-5">
-        <h6 class="text-muted fw-semibold mb-2">
-          Project: {{ group.grouper.name }}
-        </h6>
-
-        {% for task in group.list %}
-          <a href="{% url 'manager:task-detail' task.id %}?from=my-tasks" class="text-decoration-none text-dark">
-            <div class="card card-bordered mb-2">
-              <div class="card-body">
-                <h5 class="card-title mb-1">
-                  <span class="task-number">{{ task.number }}</span> {{ task.name }}
-                </h5>
-                <p class="small mb-0">
-                  <strong>Status:</strong> {{ task.get_status_display }} |
-                  <strong>Deadline:</strong>
-                  <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
-                    {{ task.deadline|date:"Y-m-d H:i" }}
-                  </span> |
-                  <strong>Type:</strong> {{ task.task_type.name }} |
-                  <strong>Priority:</strong> {{ task.priority }}
-                </p>
-              </div>
-            </div>
-          </a>
-        {% endfor %}
-      </div>
-    {% endfor %}
-
-  {% else %}
-    <div class="alert alert-info">
-      You don't have any assigned tasks.
-    </div>
-  {% endif %}
+  <div id="task-list-container">
+    {# My Task list rendered by HTMX #}
+    {% include "includes/my_task_list_content.html" %}
+  </div>
 {% endblock %}
