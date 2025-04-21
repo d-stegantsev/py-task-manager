@@ -104,13 +104,14 @@ class TaskDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        task = self.object
+        comments = Comment.objects.filter(task=task).select_related("created_by").order_by("-created_time")
+
         context.update({
-            "project": self.object.project,
+            "project": task.project,
             "form": CommentForm(),
-            "comments": Comment.objects
-            .filter(task=self.object)
-            .select_related("created_by")
-            .order_by("-created_time"),
+            "comments": comments,
             "came_from": self.request.GET.get("from", ""),
             "now": timezone.now(),
         })
@@ -195,9 +196,12 @@ class MyTaskListView(FilteredTaskListMixin, ListView):
     context_object_name = "task_list"
 
     def get_queryset(self):
-        queryset = Task.objects.filter(
-            assignees=self.request.user
-        ).select_related("project", "task_type").order_by("project__name", "deadline")
+        queryset = (
+            Task.objects
+            .filter(assignees=self.request.user)
+            .select_related("project", "task_type")
+            .order_by("project__name", "deadline")
+        )
         return self.filter_tasks(queryset)
 
     def get_context_data(self, **kwargs):
