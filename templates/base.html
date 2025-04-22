@@ -29,10 +29,14 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        flatpickr("#id_deadline", {
+        flatpickr("#id_deadline:not(.no-timepicker)", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             time_24hr: true
+        });
+        flatpickr("#id_deadline.no-timepicker", {
+            enableTime: false,
+            dateFormat: "Y-m-d"
         });
     });
 </script>

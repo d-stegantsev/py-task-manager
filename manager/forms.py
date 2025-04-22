@@ -8,9 +8,12 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = ["name", "description", "deadline"]
         widgets = {
-            "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "deadline": forms.DateInput(
+                attrs={"type": "date", "class": "form-control no-timepicker"}
+            ),
             "description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
         }
+
 
 
 # Comment form for tasks
