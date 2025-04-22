@@ -22,6 +22,11 @@ A lightweight task management system designed for small teams and developers. Bu
 - Crispy Forms
 - SQLite (for development)
 
+## Url:
+https://minimalistic-task-manager.onrender.com
+
+login: user | pass: user12345
+
 ## Installation
 
 1. Clone the repository:
