@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-p)x60&w4q+i_vdhi$z34g5x_94$e^!2y(t89^&(q!9tt!2x=d!"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-p)x60&w4q+i_vdhi$z34g5x_94$e^!2y(t89^&(q!9tt!2x=d!")
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -91,7 +91,7 @@ AUTH_USER_MODEL = "accounts.Worker"
 
 # Login settings
 LOGIN_URL = reverse_lazy("login")
-LOGIN_REDIRECT_URL = reverse_lazy("manager:project-list")
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = reverse_lazy("login")
 
 # Crispy Forms
