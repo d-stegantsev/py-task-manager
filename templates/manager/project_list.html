@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2 class="mb-4">Projects</h2>
+
+  {% if projects %}
+    <div class="d-flex flex-column gap-3">
+      {% for project in projects %}
+        <a href="{% url 'manager:task-list' project.id %}" class="text-decoration-none text-dark">
+          <div class="card card-bordered">
+            <div class="card-body d-flex justify-content-between">
+
+              <!-- Left: Name and task stats -->
+              <div class="w-50">
+                <h5 class="card-title mb-1">{{ project.name }}</h5>
+                <p class="small text-muted mb-1">
+                  Total tasks: {{ project.total_tasks }}
+                </p>
+                <p class="small text-muted mb-0">
+                  New: {{ project.tasks_new }} |
+                  In Progress: {{ project.tasks_in_progress }} |
+                  Done: {{ project.tasks_done }}
+                </p>
+              </div>
+
+              <!-- Right: Description and dates -->
+              <div class="w-50 text-end">
+                {% if project.description %}
+                  <p class="text-muted mb-2">{{ project.description }}</p>
+                {% endif %}
+                <p class="small text-muted mb-0">
+                  Created: {{ project.created|date:"Y-m-d" }}<br>
+                  {% if project.deadline %}
+                    Deadline:
+                    <span class="{% if project.deadline < today %}text-danger fw-bold{% endif %}">
+                      {{ project.deadline|date:"Y-m-d" }}
+                    </span>
+                  {% endif %}
+                </p>
+
+              </div>
+
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No projects available.</div>
+  {% endif %}
+{% endblock %}

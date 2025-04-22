@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="row">
+
+    <!-- Left column: action buttons -->
+    <div class="col-md-2">
+      <a href="{% url 'manager:task-update' task.id %}" class="btn btn-main w-100 mb-2">Edit Task</a>
+      {% if came_from == "my-tasks" %}
+        <a href="{% url 'manager:my-tasks' %}" class="btn btn-outline-main w-100">Back to my tasks</a>
+      {% else %}
+        <a href="{% url 'manager:task-list' project_id=task.project.id %}" class="btn btn-outline-main w-100">Back to
+          project</a>
+      {% endif %}
+    </div>
+
+    <!-- Middle column: description and comments -->
+    <div class="col-md-7">
+      <h2 class="mb-3">
+        <span class="text-muted" style="font-size: 0.75em; margin-right: 4px;">{{ task.number }}</span>
+        {{ task.name }}
+      </h2>
+
+      <p><strong>Description:</strong> {{ task.description }}</p>
+
+      <hr>
+      <h5>Comments</h5>
+      {% for comment in comments %}
+        <div class="mb-2 p-2 border rounded">
+          <small><strong>{{ comment.created_by.username }}</strong> — {{ comment.created_time|date:"Y-m-d H:i" }}
+          </small>
+          <p class="mb-0">{{ comment.content }}</p>
+        </div>
+      {% empty %}
+        <p>No comments yet.</p>
+      {% endfor %}
+
+      {% if user.is_authenticated %}
+        <hr>
+        <h5>Add a comment</h5>
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-outline-main">Submit</button>
+        </form>
+      {% else %}
+        <hr>
+        <p><em><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to leave a comment.</em></p>
+      {% endif %}
+    </div>
+
+    <!-- Right column: task metadata -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Task Details</h5>
+
+          <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+          <p><strong>Type:</strong> {{ task.task_type.name }}</p>
+          <p><strong>Priority:</strong> {{ task.priority }}</p>
+          <p>
+            <strong>Deadline:</strong>
+            <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
+              {{ task.deadline|date:"Y-m-d H:i" }}
+            </span>
+          </p>
+
+
+          <p><strong>Assignees:</strong>
+            {% for user in task.assignees.all %}
+              {{ user.username }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              <em>None</em>
+            {% endfor %}
+          </p>
+
+          <p><strong>Tags:</strong>
+            {% for tag in task.tags.all %}
+              <span class="badge bg-secondary">{{ tag.name }}</span>
+            {% empty %}
+              <em>None</em>
+            {% endfor %}
+          </p>
+
+          {% if user.is_authenticated %}
+            <hr>
+            <form method="post" class="d-grid gap-2 mb-3">
+              {% csrf_token %}
+              <label for="status" class="form-label"><strong>Change status:</strong></label>
+              <select name="status_update" id="status" class="form-select mb-2">
+                {% for key, label in task.Status.choices %}
+                  <option value="{{ key }}" {% if task.status == key %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="btn btn-outline-main btn-sm">Update</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

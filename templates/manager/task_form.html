@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <form method="post" id="task-form">
+    {% csrf_token %}
+    <div class="row">
+
+      <!-- Left column: form buttons -->
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-main w-100 mb-2">Save</button>
+
+        {% if task.pk %}
+          <a href="{% url 'manager:task-detail' task.id %}" class="btn btn-outline-main w-100 mb-2">Cancel</a>
+        {% else %}
+          <a href="{% url 'manager:task-list' project.id %}" class="btn btn-outline-main w-100 mb-2">Cancel</a>
+        {% endif %}
+      </div>
+
+      <!-- Center column: title, description -->
+      <div class="col-md-7">
+        <h2 class="mb-3">
+          {% if task.pk %}Edit Task{% else %}Create Task{% endif %}
+        </h2>
+
+        <div class="mb-3">
+          {{ form.name.label_tag }}
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div class="text-danger">{{ form.name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.description.label_tag }}
+          {{ form.description }}
+          {% if form.description.errors %}
+            <div class="text-danger">{{ form.description.errors }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right column: task metadata -->
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Details</h5>
+
+            <div class="mb-3">
+              {{ form.task_type.label_tag }}
+              {{ form.task_type }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.deadline.label_tag }}
+              {{ form.deadline }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.status.label_tag }}
+              {{ form.status }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.priority.label_tag }}
+              {{ form.priority }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.tags.label_tag }}
+              {{ form.tags }}
+            </div>
+
+            <div class="mb-3">
+              {{ form.assignees.label_tag }}
+              {{ form.assignees }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand" href="{% url 'manager:project-list' %}">Minimalistic Task Manager</a>
+
+      {% if request.resolver_match.url_name == "project-list" %}
+        <a href="{% url 'manager:project-create' %}" class="btn btn-outline-light btn-sm ms-3">
+          + Create Project
+        </a>
+      {% endif %}
+
+      {% if project %}
+        <span class="navbar-text text-white ms-3">
+          Project: {{ project.name }}
+        </span>
+        <a href="{% url 'manager:task-create' project.id %}" class="btn btn-outline-light btn-sm ms-3">
+          + Create Task
+        </a>
+      {% endif %}
+
+      {% if request.resolver_match.url_name == "task-list" or request.resolver_match.url_name == "my-tasks" %}
+        {% include "includes/task_filters.html" %}
+      {% endif %}
+    </div>
+
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav align-items-center">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <span class="nav-link">Hello, {{ user.username }}</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}?next={{ request.path }}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link" style="padding: 0; margin: 0;">
+                Logout
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-1 fixed-bottom shadow-sm">
+  <div class="container-fluid text-center small">
+    <div class="row align-items-center" style="font-size: 0.8rem;">
+      <div class="col-md-4 text-md-start">
+        &copy; {% now "Y" %} Minimalistic Task Manager
+      </div>
+      <div class="col-md-4 my-0">
+        <a href="#" class="text-decoration-none text-light mx-1">About</a>
+        <a href="#" class="text-decoration-none text-light mx-1">Contact</a>
+        <a href="#" class="text-decoration-none text-light mx-1">Help</a>
+      </div>
+      <div class="col-md-4 text-md-end">
+        Developed by Dmytro Stehantsev
+      </div>
+    </div>
+  </div>
+</footer>

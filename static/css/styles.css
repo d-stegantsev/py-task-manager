@@ -1,0 +1,74 @@
+/* --- Card Styling --- */
+.card-bordered {
+  border-left: 5px solid #12aed7;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.card-bordered:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  background-color: #f8f9fa;
+}
+
+/* --- Form Controls --- */
+form .form-control {
+  max-width: 100%;
+}
+
+/* --- Full Width Buttons --- */
+.btn-wide {
+  width: 100%;
+}
+
+/* --- Page Background --- */
+body {
+  background-color: #fefefe;
+}
+
+/* --- Primary Button --- */
+.btn-main {
+  background-color: #12aed7;
+  color: white;
+  border: none;
+}
+
+.btn-main:hover {
+  background-color: #12aed7;
+  color: white;
+}
+
+/* --- Outline Button --- */
+.btn-outline-main {
+  background-color: transparent;
+  color: #12aed7;
+  border: 1px solid #12aed7;
+}
+
+.btn-outline-main:hover {
+  background-color: #12aed7;
+  color: white;
+}
+
+/* --- Body --- */
+body.with-fixed-navbar-footer {
+  padding-top: 90px;
+  padding-bottom: 30px;
+}
+
+/* --- Task Number --- */
+.task-number {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: #e9ecef;
+  color: #212529;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  vertical-align: baseline;
+  margin-right: 4px;
+  line-height: 1;
+  position: relative;
+  top: -1px;
+  text-transform: uppercase;
+}

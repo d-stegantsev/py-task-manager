@@ -1,0 +1,33 @@
+{% if task_list %}
+  {% regroup task_list by project as project_groups %}
+
+  {% for group in project_groups %}
+    <div class="mb-4">
+      <h5 class="fw-semibold text-dark">Project: {{ group.grouper.name }}</h5>
+
+      {% for task in group.list %}
+        <a href="{% url 'manager:task-detail' task.id %}?from=my-tasks"
+           class="text-decoration-none text-dark">
+          <div class="card card-bordered mb-2 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title mb-1">
+                <span class="task-number">{{ task.number }}</span> {{ task.name }}
+              </h5>
+              <p class="small mb-0">
+                <span class="fw-semibold text-secondary">Status:</span> {{ task.get_status_display }} |
+                <span class="fw-semibold text-secondary">Deadline:</span>
+                <span class="{% if task.deadline < now %}text-danger fw-bold{% endif %}">
+                  {{ task.deadline|date:"Y-m-d H:i" }}
+                </span> |
+                <span class="fw-semibold text-secondary">Type:</span> {{ task.task_type.name }} |
+                <span class="fw-semibold text-secondary">Priority:</span> {{ task.priority }}
+              </p>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="alert alert-info">There is no task to display.</div>
+{% endif %}
