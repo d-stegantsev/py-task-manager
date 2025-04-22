@@ -6,3 +6,4 @@ manager/migrations/__pycache__/
 db.sqlite3
 notes.txt
 schema.pdf
+.env

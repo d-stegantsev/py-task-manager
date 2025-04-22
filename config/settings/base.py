@@ -3,13 +3,10 @@ from pathlib import Path
 
 from django.urls import reverse_lazy
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-p)x60&w4q+i_vdhi$z34g5x_94$e^!2y(t89^&(q!9tt!2x=d!")
-
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
-ALLOWED_HOSTS = ["127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -59,14 +56,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
-
-# SQLite for development
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
