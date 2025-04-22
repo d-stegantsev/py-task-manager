@@ -52,6 +52,30 @@
     }
   },
   {
+    "model": "accounts.worker",
+    "pk": 4,
+    "fields": {
+      "username": "user",
+      "password": "pbkdf2_sha256$600000$Pq2jUu9VojZC$uG3vfxAx8H1W+dUwGbBq+9UEXsRUm9lCGFqTBG54HNU=",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "position": null
+    }
+  },
+  {
+    "model": "accounts.worker",
+    "pk": 5,
+    "fields": {
+      "username": "admin",
+      "password": "pbkdf2_sha256$600000$YusHPnCDCLi7suwAqPl4mAm9r7C60FuZCIjZFnGxLP4=",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "position": null
+    }
+  },
+  {
     "model": "manager.tag",
     "pk": 1,
     "fields": {
