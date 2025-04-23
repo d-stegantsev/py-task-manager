@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from manager.models import Comment, Task, Project
 
 
@@ -14,6 +15,12 @@ class ProjectForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
         }
 
+    def clean_deadline(self):
+        deadline = self.cleaned_data.get("deadline")
+        # Prevent setting a past date for project deadline
+        if deadline and deadline < timezone.now().date():
+            raise forms.ValidationError("Deadline cannot be in the past.")
+        return deadline
 
 
 # Comment form for tasks
@@ -22,11 +29,13 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ["content"]
         widgets = {
-            "content": forms.Textarea(attrs={
-                "class": "form-control",
-                "rows": 3,
-                "placeholder": "Write a comment..."
-            }),
+            "content": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Write a comment...",
+                }
+            ),
         }
 
 
@@ -39,7 +48,7 @@ class TaskForm(forms.ModelForm):
     ]
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,
-        widget=forms.Select(attrs={"class": "form-select"})
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:
@@ -62,7 +71,7 @@ class TaskForm(forms.ModelForm):
                     "class": "form-control",
                     "placeholder": "Pick date and time",
                 },
-                format="%Y-%m-%d %H:%M"
+                format="%Y-%m-%d %H:%M",
             ),
             "status": forms.Select(attrs={"class": "form-select"}),
             "assignees": forms.CheckboxSelectMultiple,
@@ -72,4 +81,13 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.deadline:
-            self.initial["deadline"] = self.instance.deadline.strftime("%Y-%m-%d %H:%M")
+            self.initial["deadline"] = self.instance.deadline.strftime(
+                "%Y-%m-%d %H:%M"
+            )
+
+    def clean_deadline(self):
+        deadline = self.cleaned_data.get("deadline")
+        # Prevent setting a past datetime for task deadline
+        if deadline and deadline < timezone.now():
+            raise forms.ValidationError("Deadline cannot be in the past.")
+        return deadline
