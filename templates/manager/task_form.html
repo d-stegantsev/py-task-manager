@@ -54,6 +54,9 @@
             <div class="mb-3">
               {{ form.deadline.label_tag }}
               {{ form.deadline }}
+              {% if form.deadline.errors %}
+                <div class="text-danger">{{ form.deadline.errors }}</div>
+              {% endif %}
             </div>
 
             <div class="mb-3">
