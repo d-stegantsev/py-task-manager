@@ -40,5 +40,16 @@
         });
     });
 </script>
+<script>
+    function adjustBodyPadding() {
+        const nav = document.querySelector("nav.navbar");
+        if (nav) {
+            document.body.style.paddingTop = nav.offsetHeight + "px";
+        }
+    }
+
+    window.addEventListener("load", adjustBodyPadding);
+    window.addEventListener("resize", adjustBodyPadding);
+</script>
 </body>
 </html>
