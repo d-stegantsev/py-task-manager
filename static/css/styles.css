@@ -73,31 +73,28 @@ body.with-fixed-navbar-footer {
   text-transform: uppercase;
 }
 
-/* Стабільне дворядкове розташування на середній ширині */
-@media (max-width: 991.98px) and (min-width: 768px) {
-  .navbar-middle-row {
-    flex-wrap: nowrap !important;
-  }
-
-  .navbar-middle-left,
-  .navbar-middle-right {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .navbar-middle-right {
+/* Для середньої ширини */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .middle-filters #task-filter-form {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
     flex-wrap: nowrap;
-    overflow-x: auto;
+  }
+
+  .middle-filters select {
+    min-width: 100px;
+  }
+}
+
+/* Для мобілки */
+@media (max-width: 767.98px) {
+  #task-filter-form {
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  #task-filter-form {
-    flex-wrap: nowrap !important;
-  }
-
   #task-filter-form select {
-    min-width: 110px;
+    width: 100%;
   }
 }

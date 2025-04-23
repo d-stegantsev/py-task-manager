@@ -1,42 +1,98 @@
-<!-- Navbar -->
 <nav class="navbar navbar-dark bg-dark fixed-top shadow-sm py-2">
-  <div class="container-fluid d-flex flex-column gap-2">
+  <div class="container-fluid">
 
-    <!-- ПЕРШИЙ РЯДОК: Назва + User -->
-    <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
-      <a class="navbar-brand mb-0" href="{% url 'manager:project-list' %}">Minimalistic Task Manager</a>
-
-      <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
+    <!-- 🖥 DESKTOP (≥992px) -->
+    <div class="d-none d-lg-flex justify-content-between align-items-center w-100 gap-3">
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <a class="navbar-brand mb-0" href="{% url 'manager:project-list' %}">Minimalistic Task Manager</a>
+        {% if project %}
+          <span class="navbar-text text-white">Project: {{ project.name }}</span>
+          <a href="{% url 'manager:task-create' project.id %}" class="btn btn-outline-light btn-sm">+ Create Task</a>
+        {% elif request.resolver_match.url_name == "project-list" %}
+          <a href="{% url 'manager:project-create' %}" class="btn btn-outline-light btn-sm">+ Create Project</a>
+        {% endif %}
+        {% if request.resolver_match.url_name == "task-list" or request.resolver_match.url_name == "my-tasks" %}
+          {% include "includes/task_filters.html" %}
+        {% endif %}
+      </div>
+      <ul class="navbar-nav d-flex flex-row align-items-center gap-3 mb-0">
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <span class="nav-link">Hello, {{ user.username }}</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a>
-          </li>
+          <li class="nav-item"><span class="nav-link">Hello, {{ user.username }}</span></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a></li>
           <li class="nav-item">
             <a href="#" class="nav-link"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" method="post" action="{% url 'logout' %}?next={{ request.path }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form-desktop').submit();">Logout</a>
+            <form id="logout-form-desktop" method="post" action="{% url 'logout' %}?next={{ request.path }}"
                   style="display:none;">
               {% csrf_token %}
             </form>
-          </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
           </li>
         {% endif %}
       </ul>
     </div>
 
-    <!-- Ряд 2 (для всіх режимів) -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center w-100 gap-2 navbar-middle-row">
-      <!-- Ліва частина -->
-      <div class="d-flex align-items-center flex-wrap gap-2 navbar-middle-left">
+    <!-- 💻 MIDDLE (768–991px) -->
+    <div class="d-none d-md-flex d-lg-none flex-column gap-2 w-100">
+      <!-- Ряд 1 -->
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <a class="navbar-brand mb-0" href="{% url 'manager:project-list' %}">Minimalistic Task Manager</a>
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-3 mb-0">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><span class="nav-link">Hello, {{ user.username }}</span></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a></li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"
+                 onclick="event.preventDefault(); document.getElementById('logout-form-mid').submit();">Logout</a>
+              <form id="logout-form-mid" method="post" action="{% url 'logout' %}?next={{ request.path }}"
+                    style="display:none;">
+                {% csrf_token %}
+              </form>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Ряд 2 -->
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          {% if project %}
+            <span class="navbar-text text-white">Project: {{ project.name }}</span>
+            <a href="{% url 'manager:task-create' project.id %}" class="btn btn-outline-light btn-sm">+ Create Task</a>
+          {% elif request.resolver_match.url_name == "project-list" %}
+            <a href="{% url 'manager:project-create' %}" class="btn btn-outline-light btn-sm">+ Create Project</a>
+          {% endif %}
+        </div>
+        {% if request.resolver_match.url_name == "task-list" or request.resolver_match.url_name == "my-tasks" %}
+          <div class="middle-filters">
+            {% include "includes/task_filters.html" %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- 📱 MOBILE (<768px) -->
+    <div class="d-flex d-md-none flex-column gap-2 w-100">
+      <!-- Назва + юзер -->
+      <div class="d-flex justify-content-between align-items-center">
+        <a class="navbar-brand mb-0" href="{% url 'manager:project-list' %}">Minimalistic Task Manager</a>
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-3 mb-0">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><span class="nav-link">Hello, {{ user.username }}</span></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'manager:my-tasks' %}">My Tasks</a></li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"
+                 onclick="event.preventDefault(); document.getElementById('logout-form-mob').submit();">Logout</a>
+              <form id="logout-form-mob" method="post" action="{% url 'logout' %}?next={{ request.path }}"
+                    style="display:none;">
+                {% csrf_token %}
+              </form>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Проєкт -->
+      <div class="d-flex flex-wrap gap-2">
         {% if project %}
           <span class="navbar-text text-white">Project: {{ project.name }}</span>
           <a href="{% url 'manager:task-create' project.id %}" class="btn btn-outline-light btn-sm">+ Create Task</a>
@@ -45,13 +101,12 @@
         {% endif %}
       </div>
 
-      <!-- Права частина -->
-      <div class="navbar-middle-right">
-        {% if request.resolver_match.url_name == "task-list" or request.resolver_match.url_name == "my-tasks" %}
-          {% include "includes/task_filters.html" %}
-        {% endif %}
-      </div>
+      <!-- Фільтри -->
+      {% if request.resolver_match.url_name == "task-list" or request.resolver_match.url_name == "my-tasks" %}
+        {% include "includes/task_filters.html" %}
+      {% endif %}
     </div>
+
   </div>
 </nav>
 
