@@ -73,13 +73,31 @@ body.with-fixed-navbar-footer {
   text-transform: uppercase;
 }
 
-@media (max-width: 991.98px) {
-  #task-filter-form {
-    flex-wrap: wrap;
+/* Стабільне дворядкове розташування на середній ширині */
+@media (max-width: 991.98px) and (min-width: 768px) {
+  .navbar-middle-row {
+    flex-wrap: nowrap !important;
   }
 
-  #task-filter-form select,
-  #task-filter-form span {
-    margin-bottom: 0.5rem;
+  .navbar-middle-left,
+  .navbar-middle-right {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .navbar-middle-right {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+  }
+
+  #task-filter-form {
+    flex-wrap: nowrap !important;
+  }
+
+  #task-filter-form select {
+    min-width: 110px;
   }
 }
