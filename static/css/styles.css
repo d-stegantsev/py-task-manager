@@ -77,14 +77,9 @@ body.with-fixed-navbar-footer {
   #task-filter-form {
     flex-wrap: wrap;
   }
+
   #task-filter-form select,
   #task-filter-form span {
     margin-bottom: 0.5rem;
-  }
-}
-
-@media (min-width: 992px) {
-  .navbar .form-select {
-    min-width: 140px;
   }
 }
