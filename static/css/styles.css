@@ -49,13 +49,13 @@ body {
   color: white;
 }
 
-/* --- Body --- */
+/* --- Fixed navbar and footer offsets --- */
 body.with-fixed-navbar-footer {
   padding-top: 90px;
   padding-bottom: 30px;
 }
 
-/* --- Task Number --- */
+/* --- Task Number Badge --- */
 .task-number {
   display: inline-block;
   padding: 2px 8px;
@@ -73,8 +73,8 @@ body.with-fixed-navbar-footer {
   text-transform: uppercase;
 }
 
-/* Для середньої ширини */
-@media (min-width: 768px) and (max-width: 991.98px) {
+/* --- Medium screens (768px–1239.98px) --- */
+@media (min-width: 768px) and (max-width: 1239.98px) {
   .middle-filters #task-filter-form {
     display: flex;
     justify-content: flex-end;
@@ -87,7 +87,7 @@ body.with-fixed-navbar-footer {
   }
 }
 
-/* Для мобілки */
+/* --- Mobile screens (<768px) --- */
 @media (max-width: 767.98px) {
   .btn-sm {
     font-size: 1rem;
@@ -97,5 +97,25 @@ body.with-fixed-navbar-footer {
   .navbar .btn-sm {
     width: 100%;
     text-align: center;
+  }
+}
+
+/* --- Override extra-large breakpoint (1200px–1239.98px) --- */
+@media (min-width: 1200px) and (max-width: 1239.98px) {
+  .d-xl-none {
+    display: flex !important;
+  }
+  .d-xl-flex {
+    display: none !important;
+  }
+}
+
+/* --- Default extra-large (desktop) mode from 1240px+ --- */
+@media (min-width: 1240px) {
+  .d-xl-none {
+    display: none !important;
+  }
+  .d-xl-flex {
+    display: flex !important;
   }
 }
